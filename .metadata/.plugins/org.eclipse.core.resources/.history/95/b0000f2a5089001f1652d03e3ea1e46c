@@ -1,0 +1,12 @@
+package com.naman.entities;
+
+import jakarta.persistence.Entity;
+
+@Entity
+public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name  = "country_id")
+	private Long countryId;
+}
