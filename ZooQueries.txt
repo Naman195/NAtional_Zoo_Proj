@@ -1,0 +1,156 @@
+show databases;
+use nationalzoo;
+show tables;
+
+create table country (
+	country_id bigint PRIMARY KEY auto_increment,
+    country_name varchar(255) NOT NULL
+);
+
+desc country;
+
+create table state(
+	state_id bigint PRIMARY KEY auto_increment,
+    state_name varchar(255) not null,
+    country_id bigint,
+    foreign key (country_id) references Country(country_id) on delete cascade
+);
+
+desc state;
+
+create table city(
+	city_id bigint PRIMARY KEY auto_increment,
+    city_name varchar(255) not null,
+    state_id bigint,
+    foreign key (state_id) references State(state_id) on delete cascade
+);
+
+desc city;
+
+create table Address (
+	address_id bigint PRIMARY KEY auto_increment,
+    street varchar(255),
+    zip_code varchar(255),
+    country_id bigint,
+    state_id bigint,
+    city_id bigint,
+    foreign key (country_id) references Country(country_id) on delete set Null,
+    foreign key (state_id) references State(state_id) on delete set Null,
+    foreign key (city_id) references City(city_id) on delete set Null
+);
+
+
+
+desc address;
+    
+
+create table user (
+	user_id bigint PRIMARY KEY auto_increment,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    username varchar(255) not null,
+    password varchar(255) not null,
+    address_id bigint,
+    foreign key (address_id) references Address(address_id) on delete set null
+);
+
+desc user;
+
+create table zoo(
+zoo_id bigint PRIMARY KEY auto_increment,
+zoo_name varchar(255) not null,
+address_id bigint,
+foreign key (address_id) references Address(address_id) on delete set null
+);
+
+desc zoo;
+
+create table Animal(
+animal_id bigint PRIMARY KEY auto_increment,
+animal_name varchar(255) not null,
+animal_type varchar(255) not null,
+zoo_id bigint,
+user_id bigint,
+foreign key (zoo_id) references Zoo(zoo_id) on delete cascade,
+foreign key (user_id) references user(user_id) on delete set null
+);
+
+desc animal;
+
+show tables;
+
+
+INSERT INTO country (country_name)
+VALUES ('India'), ('United States'), ('Australia');
+
+select * from country;
+
+INSERT INTO state (state_name, country_id)
+VALUES 
+('Maharashtra', 1), -- India
+('Karnataka', 1), -- India
+('California', 2), -- United States
+('Texas', 2), -- United States
+('New South Wales', 3), -- Australia
+('Victoria', 3); -- Australia
+
+select * from state;
+
+INSERT INTO city (city_name, state_id)
+VALUES 
+('Mumbai', 1), -- Maharashtra
+('Pune', 1), -- Maharashtra
+('Bangalore', 2), -- Karnataka
+('San Francisco', 3), -- California
+('Los Angeles', 3), -- California
+('Sydney', 5), -- New South Wales
+('Melbourne', 6); -- Victoria
+
+select * from city;
+    
+    
+INSERT INTO address (street, zip_code, country_id, state_id, city_id)
+VALUES 
+('123 Film City Road', '400001', 1, 1, 1), -- India, Maharashtra, Mumbai
+('456 CyberHub', '560001', 1, 2, 3), -- India, Karnataka, Bangalore
+('789 US St', '94101', 2, 3, 5), -- USA, California, San Francisco
+('101 Aussie Rd', '2000', 3, 5, 6); -- Australia, New South Wales, Sydney
+
+select  * from Address;
+
+INSERT INTO user (first_name, last_name, username, password, address_id)
+VALUES 
+('john', 'doe', 'john_doe', 'password123', 1),
+('jane', 'smith', 'jane_smith', 'password456',  2),
+('alice', 'wong', 'alice_wong', 'password789',  3);
+
+select * from user;
+
+INSERT INTO zoo (zoo_name, address_id)
+VALUES 
+('National Zoo', 1), 
+('San Diego Zoo', 3), 
+('Taronga Zoo', 4);
+
+select * from zoo;
+
+
+INSERT INTO animal (animal_name, animal_type, zoo_id, user_id)
+VALUES 
+('Lion', 'Mammal', 1, 1),  -- Added by John Doe
+('Tiger', 'Mammal', 1, 2),  -- Added by Jane Smith
+('Elephant', 'Mammal', 2, 3),  -- Added by Alice Wong
+('Kangaroo', 'Mammal', 3, 1),  -- Added by John Doe
+('Penguin', 'Bird', 3, 2);  -- Added by Jane Smith
+
+select * from Animal;
+    
+select * from animal where zoo_id  = 1;
+
+
+
+
+    
+    
+    
+    
